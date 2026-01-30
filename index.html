@@ -37,6 +37,7 @@
 
         .main-card { background: #FFFFFF; border-radius: 35px; padding: 30px 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); position: relative; overflow: hidden; }
         
+        /* --- 修改重点开始 --- */
         .date-info { 
             font-size: 18px; 
             font-weight: 700; 
@@ -48,8 +49,21 @@
             gap: 6px; 
             line-height: 1.4;
         }
-        .week-tag { color: var(--ios-blue); font-weight: 800; }
-        .time-tag { font-variant-numeric: tabular-nums; color: #8E8E93; font-weight: 500; }
+        
+        /* 1. 给星期标签加上自动左边距，把它和时间挤到右边去 */
+        .week-tag { 
+            color: var(--ios-blue); 
+            font-weight: 800; 
+            margin-left: auto; /* 核心修改：利用 Flexbox 撑开间距 */
+        }
+        
+        /* 2. 修改时间颜色为蓝色，与星期保持一致 */
+        .time-tag { 
+            font-variant-numeric: tabular-nums; 
+            color: var(--ios-blue); /* 核心修改：改为蓝色 */
+            font-weight: 500; 
+        }
+        /* --- 修改重点结束 --- */
         
         .color-box { display: flex; align-items: center; gap: 20px; margin: 30px 0; }
         .swatch { width: 90px; height: 90px; border-radius: 28px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); flex-shrink: 0; transition: background 0.3s ease; }
@@ -103,6 +117,7 @@
     const G = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
     const W = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
     
+    // 锚点日期
     const ANCHOR = { d: new Date(2025, 11, 28), g: 7, z: 7 }; 
 
     const RULES = {
@@ -147,7 +162,9 @@
 
         document.getElementById('cName').innerText = info.c;
         document.getElementById('swatch').style.backgroundColor = info.h;
+        // 如果是白色，加个边框防止看不清
         document.getElementById('swatch').style.border = info.c === "白色" ? "1px solid #ddd" : "none";
+        // 如果背景是白色，字体改深色
         document.getElementById('cName').style.color = info.h === "#FFFFFF" ? "#1C1C1E" : info.h;
 
         document.getElementById('logic').innerHTML = 
@@ -158,6 +175,7 @@
     function move(n) { displayDate.setDate(displayDate.getDate() + n); render(); }
     function reset() { displayDate = new Date(); render(); }
     
+    // 启动定时器更新时间
     setInterval(render, 1000);
     render();
 </script>
